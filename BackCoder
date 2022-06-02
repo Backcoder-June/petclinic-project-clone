@@ -1,0 +1,21 @@
+@MappedSuperclass
+단순히 맵핑 정보만을 Subclass 들에게 뿌려주는 Superclass
+id, name 등과 같이 계속해서 쓰이고, 공통으로 맵핑 정보를 넣어줘야 할 때, annotation 해서 상속해서 쓴다.
+MappedSuperclass 자기자신은 Table 에 맵핑되지 않는다. -> Entity 가 아니다.
+Entity -> Entity 상속 가능, MappedSuperclass 상속 가능.
+ex) id, name, 등록일, 수정일 등 전체 Entity 에 공통으로 적용할 때 쓰자.
+
+Serializable 직렬화
+자바 시스템 내부에서 사용되는 객체 또는 데이터들을 외부의 자바 시스템에서도 사용할 수 있도록
+바이트(byte) 형태로 데이터 변환하는 기술
+바이트로 변환된 데이터를 다시 객체로 변환하는 역직렬화를 포함
+
+PK (Primary Key) 기본 키 값을 맵핑
+@Id - 직접할당
+@GeneratedValue - 자동생성 (strategy = GenerationType.IDENTITY)
+ -> PK 값 생성을 DB에 위임. DB에 저장해야 PK 값 생성 됨
+
+객체와 테이블 매핑 : @Entity, @Table
+기본 키 매핑 : @Id @GeneratedValue
+필드와 컬럼 매핑 : @Column
+연관관계 매핑 : @ManyToOne, @JoinColumn

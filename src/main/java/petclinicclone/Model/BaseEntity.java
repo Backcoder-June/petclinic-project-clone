@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
-@MappedSuperclass                                 // 상속받는 subclass 들이 mapped 된다. Entity 역할. 자신은 X
-public class BaseEntity implements Serializable {        //Serializable <<
+@MappedSuperclass                                        // 상속받는 subclass 들에게 mapping 정보 제공
+public class BaseEntity implements Serializable {        //Serializable << Byte 로 만들기
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
