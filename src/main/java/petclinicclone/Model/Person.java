@@ -4,18 +4,18 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
 
-@MappedSuperclass
-public class Person extends BaseEntity{                 //NamedEntity 부터 Person 까지 다 BaseEntitiy 상속중.
-                                                       // id 값 밖에 없는데 그 KS 인가 그것 때문에 상속해서 쓰려는 듯
+@MappedSuperclass                       //BaseEntity, NamedEntity, Person 은 다 MappedSuperclass 가져다 쓸거니까
+public class Person extends BaseEntity{                //NamedEntity 부터 Person 까지 다 BaseEntity 상속중.
+                                                       // id 값을 PK로 상속해서 쓰려는 듯
 
-    // id 야 ks 값, 구분자로 그러려니 하는데 어짜피 first name last name 으로 도메인 entity 생성하는데
-    // NamedEntity - 그냥 String name 인 도메인 entity 를 왜 또 따로 만들고 있어야 하는지 ??? 보충
+    // NamedEntity 에서 String name 따로  여기서 firstName lastName 따로 만드는 이유 <보충>
+    // 강아지이름이었다 NamedEntity  맞네 필요하네
 
-    @Column(name = "first_name")                       //Column 으로 table 하고 이름 다를 때 준다, 보충 필
-    @NotEmpty                                         //NotEmpty 보충 필
-    private String firstName;
+    @Column(name = "first_name")                   //Column 으로 table 행 추가
+    @NotEmpty                                      //@NotNull -  Null(불가) /(empty) ""(가능) /(blank) " "(가능)/
+    private String firstName;                      // @NotEmpty - Null(불가) /(empty)"" (불가) /(blank) " " (가능)/
     @Column(name = "last_name")
-    @NotEmpty
+    @NotEmpty                                      //사용자가 name 입력할때, 빈값으로 못만들게 하려고
     private String lastName;
 
     public String getFirstName() {

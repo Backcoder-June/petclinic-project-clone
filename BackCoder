@@ -17,5 +17,52 @@ PK (Primary Key) 기본 키 값을 맵핑
 
 객체와 테이블 매핑 : @Entity, @Table
 기본 키 매핑 : @Id @GeneratedValue
-필드와 컬럼 매핑 : @Column
+필드와 컬럼 매핑 : @Column <- DB 의 Table
 연관관계 매핑 : @ManyToOne, @JoinColumn
+
+@Table(name="table 이름") -> 새로운 Table sheet 을 만드는것
+@Column(name="행 이름")   -> 그 Table 에 행을 만들어서 추가하는 것
+이름은 실제 값 넣을 때, 일치해야 하므로 중요
+
+@NotNull  -  Null(불가) /(empty)"" (가능) /(blank) " " (가능)/      불가  -> validation 추가
+@NotEmpty -  Null(불가) /(empty)"" (불가) /(blank) " " (가능)/
+@NotBlank -  Null(불가) /(empty)"" (불가) /(blank) " " (불가)/
+
+
+
+@날짜                                               //Date, Calneder 이제 안쓴다 개판임
+LocalDate currentDate = LocalDate.now();           // 컴퓨터의 현재 날짜 정보
+LocalDate myDate = LocalDate.of(1991, 12, 06);     // 직접 입력
+
+        myDate.getYear();
+        myDate.getMonth();          // December 로 가져옴
+        myDate.getMonthValue();     // 12월 로 가져옴
+        myDate.getDayOfMonth();     // 6
+        myDate.getDayOfWeek();      // 요일
+
+LocalDateTime currentDateTime = LocalDateTime.now();
+LocalDateTime myDateTime = LocalDateTime.of(1991, 12, 6, 6, 15, 30);
+
+LocalTime currenttime = LocalTime.now();
+LocalTime mytime = LocalTime.of(6, 17);
+
+
+@DateTimeFormat( pattern = "yyyy-MM-dd" )    // 날짜 format 정해주기
+
+
+
+
+@ManyToOne                                // Table - Table 연관관계 매핑
+// category 는 많은 book 을 가짐 -> category 입장에서 one to many
+// type 은    많은   pet 을 가짐 -> pet 입장에서     many to one (많은게 나한테 온다)
+@OneToMany  @OneToOne   @ManyToMany
+
+@JoinColumn(name = "type_id")                 //  foreign(외래) 키 매핑  (생략가능 -> 자동생성)
+    private PetType type;                     // "필드명_참조하는테이블(pets)의기본key(@Id)Column명"
+
+
+
+
+
+
+

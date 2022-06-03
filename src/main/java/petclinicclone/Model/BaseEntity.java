@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass                                        // 상속받는 subclass 들에게 mapping 정보 제공
-public class BaseEntity implements Serializable {        //Serializable << Byte 로 만들기
+public class BaseEntity implements Serializable {        // Serializable << Byte 로 만들기
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,5 +20,8 @@ public class BaseEntity implements Serializable {        //Serializable << Byte 
         this.id = id;
     }
 
-    //public boolean isnew <  생성하는데 어디에 쓰려고 생성하는가
+    public boolean isNew(){
+        return this.id == null;
+    }
+    // DB에 저장되지 않은 새로운 엔티티를 어떻게 식별할지 overriding 해서 사용
 }
