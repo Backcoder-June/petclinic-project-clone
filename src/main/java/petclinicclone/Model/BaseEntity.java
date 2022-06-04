@@ -21,7 +21,8 @@ public class BaseEntity implements Serializable {        // Serializable << Byte
     }
 
     public boolean isNew(){
-        return this.id == null;
-    }
+        return this.id == null;}
     // DB에 저장되지 않은 새로운 엔티티를 어떻게 식별할지 overriding 해서 사용
+    // pet.isNew() -> PK(id) 를 이용해서 pet 에 id 가 없으면(=null) true / 있으면 false
+
 }

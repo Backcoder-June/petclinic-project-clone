@@ -15,14 +15,18 @@ PK (Primary Key) 기본 키 값을 맵핑
 @GeneratedValue - 자동생성 (strategy = GenerationType.IDENTITY)
  -> PK 값 생성을 DB에 위임. DB에 저장해야 PK 값 생성 됨
 
-객체와 테이블 매핑 : @Entity, @Table
+객체 매핑 : @Entity
+테이블 매핑 : @Table (생성)
 기본 키 매핑 : @Id @GeneratedValue
-필드와 컬럼 매핑 : @Column <- DB 의 Table
+필드와 컬럼 매핑 : @Column  (Table 행 생성)
 연관관계 매핑 : @ManyToOne, @JoinColumn
 
 @Table(name="table 이름") -> 새로운 Table sheet 을 만드는것
 @Column(name="행 이름")   -> 그 Table 에 행을 만들어서 추가하는 것
-이름은 실제 값 넣을 때, 일치해야 하므로 중요
+
+Owner extends Person  -> Person 에서 name 을 column 에만 넣어두고, 그걸 상속하면 Owner Table 안에 자동으로 들어감
+Entity 로 계속 써야하니까, name 같은거는 이런식으로 상속으로 가져다 table 에 넣는다.
+
 
 @NotNull  -  Null(불가) /(empty)"" (가능) /(blank) " " (가능)/      불가  -> validation 추가
 @NotEmpty -  Null(불가) /(empty)"" (불가) /(blank) " " (가능)/
@@ -50,15 +54,74 @@ LocalTime mytime = LocalTime.of(6, 17);
 @DateTimeFormat( pattern = "yyyy-MM-dd" )    // 날짜 format 정해주기
 
 
+@Digits(fraction = 0, integer = 10)       // fraction : 소수점 자리수 / integer : 정수 자리수
+소수점 못쓰게하려면 faction=0 default 처럼 주고, integer 로 자리수 정해두기
 
 
+<연관관계 맵핑>
 @ManyToOne                                // Table - Table 연관관계 매핑
 // category 는 많은 book 을 가짐 -> category 입장에서 one to many
 // type 은    많은   pet 을 가짐 -> pet 입장에서     many to one (많은게 나한테 온다)
 @OneToMany  @OneToOne   @ManyToMany
 
+< 연관관계 매핑 + cascade >  -  연관관계를 가진 두 엔티티에 CASCADE 속성을 설정하지 않으면 예외가 발생할 수 있다.
+cascade 전이 - 특정 엔티티에 대해 특정한 작업을 수행하면 관련된 엔티티에도 동일한 작업을 수행
+(cascade = CascadeType.ALL) 모든 cascade 를 적용
+(cascade = CascadeType.PERSIST) 엔티티를 영속화할 때, 연관된 엔티티도 함께 유지
+(cascade = CascadeType.MERGE) 엔티티 상태를 병합(Merge)할 때, 연관된 엔티티도 모두 병합
+(cascade = CascadeType.REMOVE) 엔티티를 제거할 때, 연관된 엔티티도 모두 제거
+(cascade = CascadeType.DETACH) 부모 엔티티를 detach() 수행하면, 연관 엔티티도 detach()상태가 되어 변경 사항 반영 X
+(cascade = CascadeType.REFRESH) 상위 엔티티를 새로고침(Refresh)할 때, 연관된 엔티티도 모두 새로고침
+
+<연관관계 매핑 + mappedBy>
+@OneToMany(mappedBy="category")    -> 주인이 아님을 알려줌. book 넌 category 형한테 매핑 된놈일 뿐이다
+
+< 연관관계 매핑 + fetch >    - 연관관계 엔티티를 매핑할때, 매핑하는 entity 를 즉시 가져올거냐, 지연해서 proxy 로 가져올거냐
+fetch 가져오기 - EAGER 즉시(동시에), LAZY 지연(프록시)
+Eager 로딩
+(fetch = FetchType.EAGER)
+즉시 로딩(EAGER) 전략을 사용 - 함께 조회 ( 쿼리 한번에 나감 )
+N + 1 문제(JPQL) - 쿼리를 1개 날렸는데, 그로인해 추가 쿼리가 N개 나간다 ( member 만 필요한데, team 까지 계속 쿼리 나감 )
+-> 개손해 => 실무에서는 LAZY 권장
+
+LAZY 로딩
+(fetch = FetchType.LAZY)
+getTeam()으로 조회하면 Proxy 객체가 조회
+getTeam().get(xxx)으로 Team의 필드에 직접 접근하려고 할때, LAZY 하게 쿼리가 나간다.
+이런 경우, SELECT 쿼리가 따로따로 2번 나감(네트워크를 2번 타서 조회) - 자주있으면 손해
+-> JPQL의 fetch join 을 통해서 해당 시점에 한방 쿼리로 가져와서 쓰기
+
+@ManyToOne, @OneToOne   - Default 값이 (EAGER) => 꼭 LAZY로 명시적으로 설정해서 사용!
+@OneToMany, @ManyToMany - Default 값이 (LAZY)
+
+
+
 @JoinColumn(name = "type_id")                 //  foreign(외래) 키 매핑  (생략가능 -> 자동생성)
-    private PetType type;                     // "필드명_참조하는테이블(pets)의기본key(@Id)Column명"
+    private PetType type;                     // "필드명_참조하는테이블의 기본key(@Id)Column명"
+
+@OrderBy("Column이름 ASC/DESC")  Ascending Descending 오름차순(1,2,3) 내림차순(3,2,1) / 문자는 알파벳 순
+DB 에서 가져올 때 순서 , query 명령 Order by 와 같은 기능
+Set, Map, List 에서 효과가 있음    /   SortedMap, SortedSet 에서는 Sorted 된 순서로 가져오므로 의미가 없음
+Default - ASC  생략 가능
+
+< Collection 에서 Setter   =>   .add() >
+List / Set 같은 경우, getter 는 그대로 써서, List 등에서 꺼내서 쓸 수 있으나,
+Setter 는 애초에 Set, List 형태로 Setter 를 사용할  수가 없다. 여기에 data 집어 넣을 땐, .add 로 넣었었다.
+마찬가지로 .add() 로  setter 를 대신하는 거다. (값을 넣어주는 것)
+
+
+<Repository> org.springframework.data.repository.Repository    <- import 종류
+interface extends Repository<해당계층Class 이름, Integer(id용)>{}
+
+
+
+
+
+
+
+
+
+@LinkedHashSet - 그냥 HashSet 하고 똑같은데 출력 순서만 순서대로 나오게 해준다.
 
 
 

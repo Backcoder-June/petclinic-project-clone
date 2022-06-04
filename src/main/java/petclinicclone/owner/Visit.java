@@ -26,7 +26,7 @@ public class Visit extends BaseEntity {
     public Visit(){
         this.date = LocalDate.now();
     }
-
+    // 오늘 방문했고, 오늘 날짜로 기록하는 것.
 
     //Getter Setter
     public LocalDate getDate() {
