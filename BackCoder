@@ -115,12 +115,6 @@ interface extends Repository<해당계층Class 이름, Integer(id용)>{}
 
 
 
-
-
-
-
-
-
 @LinkedHashSet - 그냥 HashSet 하고 똑같은데 출력 순서만 순서대로 나오게 해준다.
 
 

@@ -65,7 +65,7 @@ public class Owner extends Person {       //base 상속한 Person(first,last nam
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id")                                           // foreign key 정하는 법 <보!충!>
+    @JoinColumn(name = "owner_id")                           // foreign key 정하는 법 <보!충!> // 기본 : Column_Field
     @OrderBy("name")       //Pet 이 상속하는 NamedEntity 의 name
     private List<Pet> pets = new ArrayList<>();         //Pet 하고 mapping 시키면 Pet 의 정보가 다 가져와지고 사용가능해지는걸로
 

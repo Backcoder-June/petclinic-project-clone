@@ -30,7 +30,7 @@ public interface OwnerRepository extends Repository<Owner, Integer> {
 
 
 
-    void save(Owner owner);                 // 이거 dataType Owner 아니여도 돼?
+    void save(Owner owner);                 // 이거 dataType Owner 아니여도 돼?<보충>
 
 
 
